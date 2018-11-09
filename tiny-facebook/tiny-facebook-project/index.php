@@ -56,20 +56,38 @@ if (isset($_SESSION['info'])) {
     }
     ?>
                 </header>
+
+
+                <div class="wrapper " onclick="myFunction(this)">
+                    <a href="javascript:void(0)" class="nav">
+                        <div class="one"></div>
+                        <div class="two"></div>
+                        <div class="three"></div>
+
+                    </a>
+
+                </div>
+
+
+
+
                 <nav>
                     <ul>
+                        <div id='visible'>
 
-                        <?php
+                            <?php
         if (isset($_SESSION['id'])) {
-            echo " <li><a href='index.php?action=monmur'>Mon mur</a></li>";
-            echo " <li><a href='index.php?action=monprofile'>Mon Profil</a></li>";
-            echo " <li><a href='index.php?action=deconnexion'>Deconnexion</a></li>";
+            echo " <li><a class='btn btn-default btn-lg' href='index.php?action=monmur'>Mon mur</a></li>";
+            echo " <li><a class='btn btn-default btn-lg' href='index.php?action=monprofile'>Mon Profil  </a></li>";
+            echo " <li><a class='btn btn-danger btn-lg' href='index.php?action=deconnexion'>Deconnexion</a></li>";
         } else {
-            echo "<li><a href='index.php?action=login'>Login</a></li>";
-            echo "<li><a href='index.php?action=create'>S'inscrire</a></li>";
+            echo "<li><a class='btn btn-default btn-lg' href='index.php?action=login'>Login</a></li>";
+            echo "<li><a class='btn btn-default btn-lg' href='index.php?action=create'>S'inscrire</a></li>";
+            
         }
         ?>
 
+                        </div>
                     </ul>
                 </nav>
 

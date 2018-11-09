@@ -308,21 +308,29 @@ while($auteurnom=$q5->fetch()){
 
 
 
-        <div class="col-md-12 friendlist">
-            <p>Mes amis:</p>
+        <div class="col-md-12 " id="friendlistwrap">
+            <p class='btn btn-default btn-lg disabled'>Mes amis :</p>
             <ul id="friendlist">
 
 
 
                 <?php
     
-    
+$sql = "SELECT * FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate=1"; 
+$qamis = $pdo->prepare($sql);
+$qamis->execute(array($_SESSION["id"]));
 while ($result = $qamis->fetch()){ 
+
+  
 echo"
 <form name='formdel' action='index.php?action=delfriendaction' method='POST'>
-<li><a href='index.php?action=friendwall?".$result['login']."'>".$result['login']."</a>
+<li style='
+    display: inline-table;
+'><a href='index.php?action=friendwall?".$result['login']."'>".$result['login']."</a>
     
 <input type='hidden' name='friendname' id='friendname' value=".$result['login']." />
+    
+<input type='hidden' name='monmur' value=".$ok." />
 <button type='submit' class='btn btn-danger btn-sm' >Supprimer</button> 
 </li>
         </form>
@@ -330,6 +338,8 @@ echo"
     
 
 ";}
+
+                /*
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.idfriend = ? AND f.isvalidate IS NULL"; //Renvoie liste des nom AMIS de la personne connecté 
 $q9 = $pdo->prepare($sql);
 $q9->execute(array($_SESSION["id"]));
@@ -357,6 +367,7 @@ echo"
 
 ";
 }
+                */
             
 ?>
 
@@ -366,4 +377,7 @@ echo"
 
 
         </div>
+
+
+
     </div>

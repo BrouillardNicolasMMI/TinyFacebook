@@ -1,4 +1,4 @@
- function myFunction(p1) {
+/* function myFunction(p1) {
      //  p0 = "#affichercomment" + p1
      p2 = "#commentsection" + p1;
      //p2 = ".commentsection" + p1;
@@ -11,28 +11,39 @@
      //$(p3).slideToggle("slow");
 
  }
+*/
+
+function myFunction(x) {
+    x.classList.toggle("change");
+    $("#friendlistwrap").toggle("slow", function () {
+        right: '250px'
+    });
+    $("#visible").toggle("slow", function () {
+        right: '250px'
+    });
+}
 
 
- $(document).ready(function () {
-     $('.toggle').click(function () {
-         $('#target').toggle('slow');
-     });
+$(document).ready(function () {
+    $('.toggle').click(function () {
+        $('#target').toggle('slow');
+    });
 
-     $(function () {
-         $('#file-input').bind('click', function (e) {
-             document.getElementById("dim").style.display = "block";
-             document.getElementById("submit").style.display = "block";
-         });
+    $(function () {
+        $('#file-input').bind('click', function (e) {
+            document.getElementById("dim").style.display = "block";
+            document.getElementById("submit").style.display = "block";
+        });
 
-     });
+    });
 
-     $(function () {
-         $('#submit').bind('click', function (e) {
-             document.getElementById("submit").style.display = "none";
-         });
-     });
-     console.log("ready!");
+    $(function () {
+        $('#submit').bind('click', function (e) {
+            document.getElementById("submit").style.display = "none";
+        });
+    });
+    console.log("ready!");
 
 
 
- });
+});

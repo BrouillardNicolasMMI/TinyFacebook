@@ -1,5 +1,6 @@
 <?php
 
+    
 $friend = $_POST['friendname'];
 $me = $_SESSION['id'];
 
@@ -18,4 +19,10 @@ $sql = "DELETE FROM friends WHERE  idfriend= ? AND iduser = ? ";
 $q = $pdo->prepare($sql);
 $q->execute(array($me,$idfriend['id']));
 
+
+if(isset($_POST['monmur'])){
+    
+header('Location: index.php?action=monmur');
+}else{
 header('Location: index.php?action=monprofile');
+}
