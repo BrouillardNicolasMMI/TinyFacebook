@@ -22,7 +22,7 @@ $isfriend = $q->fetch();
 //exit();
     if(intval($isfriend[0])>=1){
         
-        header('Location: index.php?action=monmur');
+        header('Location: index.php?action=monprofile');
     }else{
         $sql = "UPDATE friends SET isvalidate='1' WHERE idfriend=?";
         $q = $pdo->prepare($sql); 
@@ -39,11 +39,11 @@ $isfriend = $q->fetch();
         $sql = "UPDATE friends SET isvalidate='1' WHERE idfriend=?";
         $q = $pdo->prepare($sql); 
         $q->execute(array($me));
-         header('Location: index.php?action=monmur');
+         header('Location: index.php?action=monprofile');
     }else{
         $sql = "INSERT into friends (iduser, idfriend, isvalidate) values (?, ?, 1);";
         $q = $pdo->prepare($sql); 
         $q->execute(array($me,$idfriend['id']));
-        header('Location: index.php?action=monmur');        
+        header('Location: index.php?action=monprofile');        
     }
     }

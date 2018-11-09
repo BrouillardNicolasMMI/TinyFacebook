@@ -21,21 +21,22 @@ ob_start(); // Je démarre le buffer de sortie : les données à afficher sont s
         <title>Tiny Facebook</title>
 
         <!-- Bootstrap core CSS -->
-        <link href="./css/bootstrap.min.css" rel="stylesheet">
-
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link href="./css/style.css" rel="stylesheet">
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
 
 
         <!-- Ma feuille de style à moi -->
-        <link href="./css/style.css" rel="stylesheet">
 
-
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
     </head>
 
     <body>
-
-        <?php
+        <div class="container">
+            <?php
 if (isset($_SESSION['info'])) {
     echo "<div class='alert alert-info alert-dismissible' role='alert'>
         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
@@ -46,37 +47,37 @@ if (isset($_SESSION['info'])) {
 ?>
 
 
-            <header>
-                <h3>Tiny Facebook</h3>
-                <?php 
+                <header>
+                    <h3>Tiny Facebook</h3>
+                    <?php 
     if (isset($_SESSION['id'])) {
      echo "<h5>Bonjour " . $_SESSION['login']."</h5>";
         
     }
     ?>
-            </header>
-            <nav>
-                <ul>
-                    <li><a href="index.php?action=page2">Va voir la page 2</a></li>
+                </header>
+                <nav>
+                    <ul>
 
-                    <?php
+                        <?php
         if (isset($_SESSION['id'])) {
+            echo " <li><a href='index.php?action=monmur'>Mon mur</a></li>";
+            echo " <li><a href='index.php?action=monprofile'>Mon Profil</a></li>";
             echo " <li><a href='index.php?action=deconnexion'>Deconnexion</a></li>";
-            echo " <li><a href='index.php?action=monmur'>Mon Mur</a></li>";
         } else {
             echo "<li><a href='index.php?action=login'>Login</a></li>";
             echo "<li><a href='index.php?action=create'>S'inscrire</a></li>";
         }
         ?>
 
-                </ul>
-            </nav>
+                    </ul>
+                </nav>
 
-            <div class="container-fluid">
-                <div class="row">
-                    <!--<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">-->
-                    <div class="col-md-12 main">
-                        <?php
+
+
+                <!--<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">-->
+
+                <?php
             function phpAlert($msg) {
             echo '<script type="text/javascript">alert("' . $msg . '")</script>';
 }
@@ -101,13 +102,10 @@ if (isset($_SESSION['info'])) {
             ?>
 
 
-                    </div>
-                </div>
-            </div>
-            <footer>Le pied de page</footer>
-            <script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
-            <script src="js/bootstrap.min.js" type="text/javascript"></script>
-            <script src="js/app.js" type="text/javascript"></script>
+                    <footer>Le pied de page</footer>
+
+        </div>
+        <script src="js/app.js"></script>
     </body>
 
     </html>

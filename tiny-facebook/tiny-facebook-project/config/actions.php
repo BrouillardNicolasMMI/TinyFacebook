@@ -3,9 +3,9 @@
 
 $listeDesActions = array(
     "accueil" => "vues/accueil.php",
-    "page2" => "vues/page2.php",
-    "login" => "vues/login.php",
     "monmur" => "vues/monmur.php",
+    "login" => "vues/login.php",
+    "monprofile" => "vues/monprofile.php",
     "create" => "vues/create.php",
     "creation" => "traitement/creation.php",
     "connexion" => "traitement/connexion.php",
@@ -15,4 +15,6 @@ $listeDesActions = array(
     "delfriendaction" => "traitement/delfriendaction.php",
     "acceptfriendaction" => "traitement/acceptfriendaction.php",
     "refusefriendaction" => "traitement/refusefriendaction.php",
+    "postapost" => "traitement/postapost.php",
+    "postacomment" => "traitement/postacomment.php",
 );

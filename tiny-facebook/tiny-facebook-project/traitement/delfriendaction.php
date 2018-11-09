@@ -18,4 +18,4 @@ $sql = "DELETE FROM friends WHERE  idfriend= ? AND iduser = ? ";
 $q = $pdo->prepare($sql);
 $q->execute(array($me,$idfriend['id']));
 
-header('Location: index.php?action=monmur');
+header('Location: index.php?action=monprofile');

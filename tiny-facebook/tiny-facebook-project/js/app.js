@@ -1,8 +1,3 @@
-$('.toggle').click(function () {
-    $('#target').toggle('slow');
-});
-
-
 $(document).ready(function () {
 
     //On pressing a key on "Search box" in "search.php" file. This function will be called.
@@ -36,7 +31,7 @@ $(document).ready(function () {
 
                 //Data will be sent to "ajax.php".
 
-                url: "/TinyFacebook/tiny-facebook/tiny-facebook-project/traitement/searchfriend.php",
+                url: "/tinyfacebook/tiny-facebook/tiny-facebook-project/traitement/searchfriend.php",
 
                 //Data, that will be sent to "ajax.php".
 
@@ -63,17 +58,4 @@ $(document).ready(function () {
 
     });
 
-});
-$(function () {
-    $('#file-input').bind('click', function (e) {
-        document.getElementById("dim").style.display = "block";
-        document.getElementById("submit").style.display = "block";
-    });
-
-});
-
-$(function () {
-    $('#submit').bind('click', function (e) {
-        document.getElementById("submit").style.display = "none";
-    });
 });

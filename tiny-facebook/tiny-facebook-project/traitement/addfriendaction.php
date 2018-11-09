@@ -23,7 +23,7 @@ if(intval($result[0])>=1){
     $sql = "UPDATE friends SET isvalidate = NULL WHERE idfriend=?";
     $q = $pdo->prepare($sql); 
     $q->execute(array($idfriend['id']));
-     header('Location: index.php?action=monmur');
+     header('Location: index.php?action=monprofile');
 
 }else{
     $sql = "SELECT COUNT(*) FROM friends WHERE idfriend = ? AND iduser = ? AND isvalidate IS NULL"; 
@@ -35,9 +35,9 @@ if(intval($result[0])>=1){
         var_dump($_POST['friendname']);
     //exit();
         if(intval($isfriend[0])>=1){
-            header('Location: index.php?action=monmur');
+            header('Location: index.php?action=monprofile');
         }else{
-     $sql = "INSERT into friends (iduser, idfriend) values (?, ?);"; $q = $pdo->prepare($sql); $q->execute(array($me,$idfriend['id'])); header('Location: index.php?action=monmur');        
+     $sql = "INSERT into friends (iduser, idfriend) values (?, ?);"; $q = $pdo->prepare($sql); $q->execute(array($me,$idfriend['id'])); header('Location: index.php?action=monprofile');        
         }
     
     
