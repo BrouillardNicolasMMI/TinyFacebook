@@ -14,13 +14,15 @@
     } else {
         $id = $_GET["id"];
         // Verifions si on est amis avec cette personne
-        $sql = "SELECT * FROM friends WHERE isvalidate=1
-                AND ((iduser=? AND idfriend=?) OR ((idfriend=? AND iduser=?)))";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($_GET["id"],$_SESSION["id"]));
-        $line = $q->fetch();
-        var_dump($line);
-        exit();
+        /*
+            $sql = "SELECT * FROM friends WHERE isvalidate=1
+                    AND ((iduser=? AND idfriend=?) OR ((idfriend=? AND iduser=?)))";
+            $q0 = $pdo->prepare($sql);
+            $q0->execute(array($_GET["id"],$_SESSION["id"]));
+            $line = $q0->fetch();
+            var_dump($line);
+            exit();
+        */
         // les deux ids à tester sont : $_GET["id"] et $_SESSION["id"]
         // A completer. Il faut récupérer une ligne, si il y en a pas ca veut dire que lon est pas ami avec cette personne
     }
@@ -29,7 +31,7 @@
     } else {
     // A completer
     // Requête de sélection des éléments dun mur
-     $sql = "SELECT * FROM ecrit WHERE idAmi=? order by dateEcrit DESC";
+     //$sql = "SELECT * FROM ecrit WHERE idAmi=? order by dateEcrit DESC";
      // le paramètre  est le $id
     }
 if($ok==true) {
@@ -62,35 +64,32 @@ function humanTiming ($time)
     
    
 $sql = "SELECT * FROM user WHERE id=?";
-
 // Etape 1  : preparation
-$q = $pdo->prepare($sql);
-
+$q1 = $pdo->prepare($sql);
 // Etape 2 : execution : 2 paramètres dans la requêtes !!
-$q->execute(array($_SESSION['id']));
-
+$q1->execute(array($_SESSION['id']));
 // Etape 3 : ici le login est unique, donc on sait que l'on peut avoir zero ou une  seule ligne.
-$me = $q->fetch();
-   
+$me = $q1->fetch();
+ 
+    
 // REQUETE Pour la liste des gens DEJA amis
-$sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate=1"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-    //inutile
+$sql = "SELECT * FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate=1"; //Renvoie liste des nom AMIS de la personne connecté 
+$qamis = $pdo->prepare($sql);
+$qamis->execute(array($_SESSION["id"]));
+$mesamis = $qamis->fetch();
     
     
     
-    $sql = "SELECT id FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate=1"; //Renvoie liste des nom AMIS de la personne connecté 
-    $q = $pdo->prepare($sql);
-    $q->execute(array($_SESSION["id"]));
-    $line = $q->fetch();
-   // var_dump($line); 
-    //exit();
     
-        $sql = "SELECT * FROM ecrit INNER JOIN friends f on f.iduser = ecrit.idAuteur WHERE f.iduser=? AND idAuteur=? AND f.isvalidate=1  order by dateEcrit DESC";  
-        $qmain = $pdo->prepare($sql);
-        $qmain->execute(array($_SESSION["id"],$_SESSION["id"]));
-    
+    $sql = "SELECT * FROM ecrit left JOIN friends f on f.idfriend=ecrit.idAuteurPost  WHERE ecrit.idAuteurPost=? OR f.isvalidate=1  order by dateEcrit DESC";   
+    $qmain = $pdo->prepare($sql);
+    $qmain->execute(array($_SESSION["id"]));
+ 
+         
+     
+     
+    //var_dump($_SESSION["id"]); 
+//exit();
     
         if($me['avatar']==null){
         $me['avatar']="user404.png";
@@ -141,30 +140,31 @@ $q->execute(array($_SESSION["id"]));
         <?php 
     
     //grande boucle pour chaque post 
-                 while($line = $qmain->fetch()){
+                 while($posts = $qmain->fetch()){
                     //var_dump($line);
                      //exit();
                      
                      //heure des post
-                     $heure=humanTiming(strtotime($line['dateEcrit']));
+                     $heure=humanTiming(strtotime($posts['dateEcrit']));
                      
                      
         //select du nom de la personne qui poste l'article
         $sql = "SELECT * FROM user WHERE id=? ";  
-        $q = $pdo->prepare($sql);
-        $q->execute(array($line['idAuteur']));
-        $auteurnom = $q->fetch(); 
+        $q4 = $pdo->prepare($sql);
+        $q4->execute(array($posts['idAuteurPost']));
+        $auteurnom = $q4->fetch(); 
                      
         //Select des commentaire
-        $sql = "SELECT * FROM commentaire c JOIN ecrit e ON e.id = c.idComment  WHERE idComment=? ";  
-        $q2 = $pdo->prepare($sql);
-        $q2->execute(array($line['id']));
-                     
+        $sql = "SELECT * FROM commentaire c JOIN ecrit e ON e.id=c.idComment WHERE c.idComment=?";  
+        $q5 = $pdo->prepare($sql);
+        $q5->execute(array($posts['id']));
+        
+        //var_dump($posts);
         //Compte les commentaire             
         $sql = "SELECT COUNT(*) FROM commentaire WHERE idComment = ?";  
-        $q3 = $pdo->prepare($sql);
-        $q3->execute(array($line['id']));
-        $nbrcom=$q3->fetch();
+        $q6 = $pdo->prepare($sql);
+        $q6->execute(array($posts['id']));
+        $nbrcom=$q6->fetch();
                      
                      
                      if($nbrcom[0]==0){
@@ -173,12 +173,12 @@ $q->execute(array($_SESSION["id"]));
                      if($auteurnom['avatar']==null){
         $auteurnom['avatar']="user404.png";
     }
-                     if($line['idAuteur']==$me['id']){ 
+                     if($posts['idAuteurPost']==$me['id']){ 
                      $itsmypostdelete="<a href='#'><i class='glyphicon glyphicon-remove'></i></a>";
                      }else{
                           $itsmypostdelete="<p>Amis</p>";
                      }
-                
+               // var_dump($auteurnom);
 echo"
             <div class='panel panel-default'>
             
@@ -209,7 +209,7 @@ echo"
                     <h3>
                        <br/>
                     </h3>
-                        <p>".$line['contenu']."</p>
+                        <p>".$posts['contenu']."</p>
                     </section>
                     <section class='post-footer'>
                     <h5><br/></h5>
@@ -217,7 +217,7 @@ echo"
                         <div class='post-footer-option container'>
                             <ul class='list-unstyled'>
                                 <li><a href='#'><i class='glyphicon glyphicon-thumbs-up'></i> Like</a></li>
-                                <li><a href='javascript:void(0)' id='affichercomment".$line['id']."' onClick='myFunction(".$line['id'].")' ><i class='glyphicon glyphicon-comment'></i> Commentaire (".$nbrcom[0].")</a></li>
+                                <li><a href='javascript:void(0)' id='affichercomment".$posts['id']."' onClick='myFunction(".$posts['id'].")' ><i class='glyphicon glyphicon-comment'></i> Commentaire (".$nbrcom[0].")</a></li>
 
                             </ul>
                         </div>
@@ -228,20 +228,32 @@ echo"
 
 
 
-while($auteurnom=$q2->fetch()){
+while($auteurnom=$q5->fetch()){
     //Pour chaque commentaire rechercher le nom 
+    
+    
+    
         $sql = "SELECT * FROM user WHERE id=? ";  
-        $q = $pdo->prepare($sql);
-        $q->execute(array($auteurnom['idAuteur']));
-        $auteurnomcom = $q->fetch(); 
+        $q7 = $pdo->prepare($sql);
+        $q7->execute(array($auteurnom['idAuteur']));
+        $auteurnomcom = $q7->fetch(); 
+//var_dump($auteurnom);
+    
+    
     $heurecom=humanTiming(strtotime($auteurnom['datecom']));
+    
+    
     if($auteurnomcom['avatar']==null){
         $auteurnomcom['avatar']="user404.png";
     }
+    
+    
+    //var_dump($auteurnomcom['avatar']);
+    
     echo"
-
+    
             <div class='wraper' >
-                <div class='commentsection".$line['id']."' >
+                <div class='commentsection".$posts['id']."' >
 
                     <div class='box-comments'>
                         <div class='comment'><img src='uploads/".$auteurnomcom['avatar']."' alt='' />
@@ -272,7 +284,7 @@ while($auteurnom=$q2->fetch()){
                           <form action='index.php?action=postacomment' method='POST' >
                         <div class='row'>
 
-                            <input type='hidden' name='whichcomment' value='".$line['id']."' />
+                            <input type='hidden' name='whichcomment' value='".$posts['id']."' />
                             <textarea name='contents' placeholder='Ecrire un commentaire...'></textarea>
                         </div>
                         <div class='row'>
@@ -287,14 +299,16 @@ while($auteurnom=$q2->fetch()){
             ";
             
             
+//Fin de la grande boucle while qui retourne tout les article ME concernant et concernant mes amis
 }
-}//Fin de la grande boucle while qui retourne tout les article ME concernant et concernant mes amis
+//fin du IF OK = TRUE
+}
             
 ?>
 
 
 
-        <div class="col-md-2">
+        <div class="col-md-12 friendlist">
             <p>Mes amis:</p>
             <ul id="friendlist">
 
@@ -303,7 +317,7 @@ while($auteurnom=$q2->fetch()){
                 <?php
     
     
-while ($result = $q->fetch()){ 
+while ($result = $qamis->fetch()){ 
 echo"
 <form name='formdel' action='index.php?action=delfriendaction' method='POST'>
 <li><a href='index.php?action=friendwall?".$result['login']."'>".$result['login']."</a>
@@ -317,13 +331,13 @@ echo"
 
 ";}
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.idfriend = ? AND f.isvalidate IS NULL"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-while ($result = $q->fetch()){
+$q9 = $pdo->prepare($sql);
+$q9->execute(array($_SESSION["id"]));
+while ($result = $q9->fetch()){
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.iduser = u.id WHERE f.idfriend = ? AND f.isvalidate IS NULL"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-$res = $q->fetch();
+$q10 = $pdo->prepare($sql);
+$q10->execute(array($_SESSION["id"]));
+$res = $q10->fetch();
 echo"
 
 <li><a href='index.php?action=friendwall?".$res['login']."'>".$res['login']."</a>

@@ -11,6 +11,9 @@ var_dump($idcomment);
 $me = $_SESSION['id'];
 
 
+var_dump($me);
+
+
         $sql = "INSERT into commentaire (idAuteur,idComment,content,datecom) values
         (?,?,?,CURRENT_TIMESTAMP)";
         $q = $pdo->prepare($sql); 

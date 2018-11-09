@@ -5,15 +5,15 @@
     }
 
 ?>
-    <div class="container">
-        <div class="dim" id="dim"></div>
-        <div class="col-md-6">
-            <fieldset>
-                <legend>
-                    <h1>Mon Profil</h1>
-                </legend>
 
-                <?php
+    <div class="dim" id="dim"></div>
+    <div class="col-md-6">
+        <fieldset>
+            <legend>
+                <h1>Mon Profil</h1>
+            </legend>
+
+            <?php
 $sql = "SELECT * FROM user WHERE id=?";
 
 // Etape 1  : preparation
@@ -27,17 +27,17 @@ $line = $q->fetch();
    
 // REQUETE Pour la liste des gens DEJA amis
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate=1"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
+$q2 = $pdo->prepare($sql);
+$q2->execute(array($_SESSION["id"]));
          
             
             
 ?>
 
 
-                    <div class="image-upload">
+                <div class="image-upload">
 
-                        <label for="file-input"><?php
+                    <label for="file-input"><?php
                    if($line['avatar'] != null){
     echo ("<img id='imgpp' src='uploads/".$line['avatar']."'/>");
 }else{
@@ -50,21 +50,21 @@ $q->execute(array($_SESSION["id"]));
 
                 </div>
                         </label>
-                    </div>
-            </fieldset>
+                </div>
+        </fieldset>
 
-            <form enctype="multipart/form-data" role="form" action="index.php?action=upload" method="POST">
+        <form enctype="multipart/form-data" role="form" action="index.php?action=upload" method="POST">
 
-                <input type="file" name="fileToUpload" id="file-input" />
-                <input type="submit" name="sub" id="submit" class="btn btn-success btn-lg" value="Envoyer" />
-            </form>
+            <input type="file" name="fileToUpload" id="file-input" />
+            <input type="submit" name="sub" id="submit" class="btn btn-success btn-lg" value="Envoyer" />
+        </form>
 
-        </div>
-        <div class="col-md-6">
-            <p>Mes amis:</p>
-            <ul id="friendlist">
-                <?php
-while ($result = $q->fetch()){ 
+    </div>
+    <div class="col-md-6">
+        <p>Mes amis:</p>
+        <ul id="friendlist">
+            <?php
+while ($result = $q2->fetch()){ 
 echo"
 <form name='formdel' action='index.php?action=delfriendaction' method='POST'>
 <li><a href='index.php?action=friendwall?".$result['login']."'>".$result['login']."</a>
@@ -78,13 +78,13 @@ echo"
 
 ";}
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.idfriend = ? AND f.isvalidate IS NULL"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-while ($result = $q->fetch()){
+$q3 = $pdo->prepare($sql);
+$q3->execute(array($_SESSION["id"]));
+while ($result = $q3->fetch()){
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.iduser = u.id WHERE f.idfriend = ? AND f.isvalidate IS NULL"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-$res = $q->fetch();
+$q4 = $pdo->prepare($sql);
+$q4->execute(array($_SESSION["id"]));
+$res = $q4->fetch();
 echo"
 
 <li><a href='index.php?action=friendwall?".$res['login']."'>".$res['login']."</a>
@@ -106,16 +106,16 @@ echo"
 }
             
 ?>
-            </ul>
-            <p>Mes demandes amis en attente:</p>
-            <ul>
-                <?php
+        </ul>
+        <p>Mes demandes amis en attente:</p>
+        <ul>
+            <?php
 
             
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate IS NULL"; //Renvoie liste des nom AMIS de la personne connecté 
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-while ($result = $q->fetch()){ 
+$q5 = $pdo->prepare($sql);
+$q5->execute(array($_SESSION["id"]));
+while ($result = $q5->fetch()){ 
 echo"
 <form name='formdel' action='index.php?action=delfriendaction' method='POST'>
 <li><a href='index.php?action=friendwall?".$result['login']."'>".$result['login']."</a>
@@ -129,9 +129,9 @@ echo"
 
 ";}  
 $sql = "SELECT login FROM user u INNER JOIN friends f on f.idfriend = u.id WHERE f.iduser = ? AND f.isvalidate=0"; //Renvoie liste des nom AMIS de la personne connecté qui ont refusé l'invite
-$q = $pdo->prepare($sql);
-$q->execute(array($_SESSION["id"]));
-while ($result = $q->fetch()){ 
+$q6 = $pdo->prepare($sql);
+$q6->execute(array($_SESSION["id"]));
+while ($result = $q6->fetch()){ 
 echo"
 <form name='formdel' action='index.php?action=delfriendaction' method='POST'>
 <li><a href='index.php?action=friendwall?".$result['login']."'>".$result['login']."</a>
@@ -144,20 +144,19 @@ echo"
 ";}  
             
             ?>
-            </ul>
-            <button class="btn btn-primary toggle">Ajouter des amis</button>
-            <div class="search-box" id="target">
-                <main>
-                    <form role="form" autocomplete="off">
+        </ul>
+        <button class="btn btn-primary toggle">Ajouter des amis</button>
+        <div class="search-box" id="target">
+            <main>
+                <form role="form" autocomplete="off">
 
-                        <input type="text" class="search" placeholder="Recherchez un amis" size="30" id="search" />
-                    </form>
-                    <div id="display"></div>
-
-
-                </main>
-            </div>
+                    <input type="text" class="search" placeholder="Recherchez un amis" size="30" id="search" />
+                </form>
+                <div id="display"></div>
 
 
+            </main>
         </div>
+
+
     </div>

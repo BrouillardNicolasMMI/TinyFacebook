@@ -5,11 +5,11 @@
     }
 
 $content = $_POST['content'];
-var_dump($_POST['content']);
+//var_dump($_POST['content']);
 $me = $_SESSION['id'];
-var_dump($me);
+//var_dump($me);
 
-        $sql = "INSERT into ecrit (contenu,dateEcrit,idAuteur) values
+        $sql = "INSERT into ecrit (contenu,dateEcrit,idAuteurPost) values
         (?,CURRENT_TIMESTAMP,?)";
         $q = $pdo->prepare($sql); 
         $q->execute(array($_POST['content'],$me));
