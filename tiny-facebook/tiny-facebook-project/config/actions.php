@@ -4,9 +4,9 @@
 $listeDesActions = array(
     "accueil" => "vues/accueil.php",
     "monmur" => "vues/monmur.php",
-    "login" => "vues/login.php",
+   // "login" => "vues/login.php",
     "monprofile" => "vues/monprofile.php",
-    "create" => "vues/create.php",
+    "create" => "vues/create2.php",
     "creation" => "traitement/creation.php",
     "connexion" => "traitement/connexion.php",
     "deconnexion" => "traitement/deconnexion.php",

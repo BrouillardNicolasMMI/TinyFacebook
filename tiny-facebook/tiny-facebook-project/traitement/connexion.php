@@ -14,12 +14,12 @@ if($line == true){
     $_SESSION['id'] = $line['id'];
     $_SESSION['login'] = $line['login'];
    
-    header('Location: index.php');
+    header('Location: index.php?action=monmur');
     
 }else{
     $_SESSION['error'] = "Nom d'utilisateur ou mot de passe incorect.";
-    
-    header('Location: index.php?action=login');
+    exit();
+    header('Location: index.php');
 }
 // un seul fetch
 

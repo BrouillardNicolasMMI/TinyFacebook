@@ -32,7 +32,12 @@ ob_start(); // Je démarre le buffer de sortie : les données à afficher sont s
         <script src="js/app.js"></script>
 
         <?php if(!isset($_SESSION['id'])){
-    echo"<link href='./css/connect.css' rel='stylesheet'>";}
+    echo"<link href='./css/connect.css' rel='stylesheet'>";
+     
+      
+    
+          
+      }
 ?>
 
         <!-- Ma feuille de style à moi -->
@@ -46,7 +51,7 @@ ob_start(); // Je démarre le buffer de sortie : les données à afficher sont s
 
             <?php 
     if (isset($_SESSION['id'])) {
-     echo "<h5>Bonjour " . $_SESSION['login']."</h5>";
+     echo "<h5>Vous etes connecté en tant que : " . $_SESSION['login']."</h5>";
         
             
     }else{
@@ -78,8 +83,18 @@ ob_start(); // Je démarre le buffer de sortie : les données à afficher sont s
     }
     ?>
         </header>
-        <?php  if(!isset($_SESSION['id'])){ 
- include'./vues/login.php';} ?>
+        <?php  
+    if(!isset($_SESSION['id'])){
+       
+        if(isset($_GET['action']) && $_GET['action']=='create'){
+            
+            include'./vues/create.php';
+        }else{
+            
+            include'./vues/login.php';
+   
+        }
+    } ?>
 
 
 
@@ -168,7 +183,8 @@ if (isset($_SESSION['info'])) {
 
 
         </div>
-<?php include('./vues/footer.php')?>
+        <?php include('./vues/footer.php')?>
+
 
     </body>
 

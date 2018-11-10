@@ -81,7 +81,7 @@ $mesamis = $qamis->fetch();
     
     
     
-    $sql = "SELECT * FROM ecrit left JOIN friends f on f.idfriend=ecrit.idAuteurPost  WHERE ecrit.idAuteurPost=? OR f.isvalidate=1  order by dateEcrit DESC";   
+    $sql = "SELECT * FROM ecrit left JOIN friends f on f.idfriend=ecrit.idAuteurPost  WHERE ecrit.idAuteurPost=? OR f.isvalidate=1  order by dateEcrit DESC";   //PB
     $qmain = $pdo->prepare($sql);
     $qmain->execute(array($_SESSION["id"]));
  
@@ -111,36 +111,48 @@ $mesamis = $qamis->fetch();
 
             <h1 class="col-xs-12 col-sm-7 col-md-10">Mon Mur</h1>
 
-            <div class='col-xs-12 col-sm-7 col-md-12' id='new_status'>
-                <ul class='navbar-nav col-xs-12' id='post_header'>
-                    <li><a href='#'><span class='glyphicon glyphicon-picture'></span>Ajoutez une Photos</a></li>
-                </ul>
-                <div class='col-xs-12' id='post_content'>
-                    <img alt='profile picture' class='col-xs-1' src='uploads/<?php echo $me["avatar"]; ?>'>
-                    <div class='textarea_wrap'>
-                        <textarea class='col-xs-11' name="content" form="usrform" placeholder='Quoi de neuf ?'></textarea>
+            <form enctype="multipart/form-data" action="index.php?action=postapost" method="POST" id="usrform">
+                <div class='col-xs-12 col-sm-7 col-md-12' id='new_status'>
+                    <ul class='navbar-nav col-xs-12' id='post_header'>
+                        <li>
 
-                    </div>
-                </div>
-                <div class='col-xs-12' id='post_footer'>
-                    <ul class='navbar-nav col-xs-7'>
 
+
+
+
+                        </li>
                     </ul>
-                    <div class='col-xs-5'>
+                    <div class='col-xs-12' id='post_content'>
+                        <img alt='profile picture' class='col-xs-1' src='uploads/<?php echo $me["avatar"]; ?>'>
+                        <div class='textarea_wrap'>
+                            <textarea class='col-xs-11' name="content" form="usrform" placeholder='Quoi de neuf ?'></textarea>
 
-                        <form action="index.php?action=postapost" method="POST" id="usrform">
+                        </div>
+                    </div>
+                    <div class='col-xs-12' id='post_footer'>
+                        <ul class='navbar-nav col-xs-7'>
+
+                        </ul>
+                        <div class='col-xs-5'>
+                            <div class="dropZoneOverlay">
+                                <p>Ajoutez une photo
+                                    <span class='glyphicon glyphicon-picture'></span></p>
+                                <input type='file' name='file' id='file' />
+                            </div>
 
                             <input type='hidden' name='whopost' id='whopost' value="<?php echo $me['id'];?>" />
+
                             <button type="submit" class='btn btn-primary'>Postez</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </fieldset>
         <?php 
     
     //grande boucle pour chaque post 
                  while($posts = $qmain->fetch()){
+                
                     //var_dump($line);
                      //exit();
                      
@@ -176,7 +188,7 @@ $mesamis = $qamis->fetch();
                      if($posts['idAuteurPost']==$me['id']){ 
                      $itsmypostdelete="<a href='#'><i class='glyphicon glyphicon-remove'></i></a>";
                      }else{
-                          $itsmypostdelete="<p>Amis</p>";
+                          $itsmypostdelete="<p href='#' class='badge badge-primary'>Amis</p>";
                      }
                // var_dump($auteurnom);
 echo"
@@ -209,7 +221,28 @@ echo"
                     <h3>
                        <br/>
                     </h3>
-                        <p>".$posts['contenu']."</p>
+                        <p>".$posts['contenu']."</p>";
+    if($posts['image']!=null){
+        echo "
+        <img src='uploads/".$posts['image']."'  width=200px/>
+        </section>
+                    <section class='post-footer'>
+                    <h5><br/></h5>
+                        <hr>
+                        <div class='post-footer-option container'>
+                            <ul class='list-unstyled'>
+                                <li><a href='#'><i class='glyphicon glyphicon-thumbs-up'></i> Like</a></li>
+                                <li><a href='javascript:void(0)' id='affichercomment".$posts['id']."' onClick='myFunction(".$posts['id'].")' ><i class='glyphicon glyphicon-comment'></i> Commentaire (".$nbrcom[0].")</a></li>
+
+                            </ul>
+                        </div>
+                       
+                    </section>
+                </div>
+            </div>"; 
+    }else{
+        echo"
+                        
                     </section>
                     <section class='post-footer'>
                     <h5><br/></h5>
@@ -224,7 +257,7 @@ echo"
                        
                     </section>
                 </div>
-            </div>";
+            </div>";}
 
 
 
@@ -266,14 +299,12 @@ while($auteurnom=$q5->fetch()){
                                 </div>
                                 <a href=''><i class='glyphicon glyphicon-thumbs-up like'></i></a>
                                 <p>".$auteurnom['content']."</p>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-               
-                
-";
+            </div>";
 }
                 //var_dump($line['id']);
                 echo"
@@ -331,7 +362,7 @@ echo"
 <input type='hidden' name='friendname' id='friendname' value=".$result['login']." />
     
 <input type='hidden' name='monmur' value=".$ok." />
-<button type='submit' class='btn btn-danger btn-sm' >Supprimer</button> 
+<button type='submit' class='btn btn-danger btn-sm' >X</button> 
 </li>
         </form>
     

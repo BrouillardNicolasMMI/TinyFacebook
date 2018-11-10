@@ -183,9 +183,11 @@ input[type='submit'] {
 }
 
 .login label {
+
     background-color: var(--loginLabelBackgroundColor);
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+    margin-bottom: 0px;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
 }
@@ -327,3 +329,8 @@ $NUM_LAYERS: 20;
         transform: rotateY(-40deg) rotateX(-43deg);
     }
 }
+
+
+
+
+

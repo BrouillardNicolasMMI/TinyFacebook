@@ -9,10 +9,10 @@ if(!empty($_POST['login']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])){
             $line = $q->fetch();
         
             if($line == NULL){
-                $sql = "INSERT INTO user VALUES(NUll,?,PASSWORD(?),NULL,NULL,NULL)";
+                $sql = "INSERT INTO user VALUES(NUll,?,PASSWORD(?),?,NULL,'user404.png')";
 
                 $q = $pdo->prepare($sql);
-                $q->execute(array($_POST['login'],$_POST['mdp']));
+                $q->execute(array($_POST['login'],$_POST['mdp'],$_POST['email']));
                 $_SESSION['login']=$_POST['login'];
                 $_SESSION['id']= $pdo->lastInsertId();
                 print_r($_POST);
@@ -27,11 +27,11 @@ if(!empty($_POST['login']) && !empty($_POST['mdp']) && !empty($_POST['mdp2'])){
     }else{
         $_SESSION['Prev_login'] = $_POST['login'];
         $_SESSION['error'] = "Mdp non identique";
-        header('Location:index.php?action=create');
+        header('Location:index.php');
     }
     
 }else{
     $_SESSION['error'] = "Remplir tous les champs";
-    header('Location:index.php?action=create');
+    header('Location:index.php');
     
 }
