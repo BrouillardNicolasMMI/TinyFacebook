@@ -30,8 +30,9 @@ $(document).ready(function () {
                 type: "POST",
 
                 //Data will be sent to "ajax.php".
-
-                url: "/tinyfacebook/tiny-facebook/tiny-facebook-project/traitement/searchfriend.php",
+                //Ajax sur Wamp url: "/tinyfacebook/tiny-facebook/tiny-facebook-project/traitement/searchfriend.php",
+                //Ajax sur C9.io
+                url: "/tiny-facebook/tiny-facebook-project/traitement/searchfriend.php",
 
                 //Data, that will be sent to "ajax.php".
 
