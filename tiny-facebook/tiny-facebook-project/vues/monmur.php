@@ -81,7 +81,7 @@ $mesamis = $qamis->fetch();
     
     
     
-    $sql = "SELECT * FROM ecrit left JOIN friends f on f.idfriend=ecrit.idAuteurPost  WHERE ecrit.idAuteurPost=? OR f.isvalidate=1  order by dateEcrit DESC";   //PB
+    $sql = "Select e.* From ecrit e where e.idAuteurPost = 2 OR EXISTS (select 1 from friends f where f.idfriend =e.idAuteurPost AND f.isvalidate =1 ) order by e.dateEcrit desc";   //PB
     $qmain = $pdo->prepare($sql);
     $qmain->execute(array($_SESSION["id"]));
  
