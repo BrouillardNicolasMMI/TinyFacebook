@@ -23,18 +23,69 @@ ob_start(); // Je démarre le buffer de sortie : les données à afficher sont s
         <!-- Bootstrap core CSS -->
         <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <link href="./css/style.css" rel="stylesheet">
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-
-
-
-        <!-- Ma feuille de style à moi -->
-
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
+      
+-->
         <script src="js/jquery-3.2.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
+        <script src="js/app.js"></script>
+
+        <?php if(!isset($_SESSION['id'])){
+    echo"<link href='./css/connect.css' rel='stylesheet'>";}
+?>
+
+        <!-- Ma feuille de style à moi -->
+
     </head>
 
     <body>
+
+        <header>
+
+
+            <?php 
+    if (isset($_SESSION['id'])) {
+     echo "<h5>Bonjour " . $_SESSION['login']."</h5>";
+        
+            
+    }else{
+        echo"
+           <div class='stage'>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+                <div class='layer'></div>
+            </div>
+        ";
+        
+    }
+    ?>
+        </header>
+        <?php  if(!isset($_SESSION['id'])){ 
+ include'./vues/login.php';} ?>
+
+
+
+
+
+
         <div class="container">
             <?php
 if (isset($_SESSION['info'])) {
@@ -47,26 +98,22 @@ if (isset($_SESSION['info'])) {
 ?>
 
 
-                <header>
-                    <h3>Tiny Facebook</h3>
-                    <?php 
-    if (isset($_SESSION['id'])) {
-     echo "<h5>Bonjour " . $_SESSION['login']."</h5>";
-        
-    }
-    ?>
-                </header>
 
 
-                <div class="wrapper " onclick="myFunction(this)">
-                    <a href="javascript:void(0)" class="nav">
-                        <div class="one"></div>
-                        <div class="two"></div>
-                        <div class="three"></div>
+                <?php 
+              if(isset($_SESSION['id'])){
+                  echo"
+                <div class='wrapper' onclick='myFunction(this)'>
+                    <a href='javascript:void(0)' class='nav'>
+                        <div class='one'></div>
+                        <div class='two'></div>
+                        <div class='three'></div>
 
                     </a>
 
-                </div>
+                </div>";}
+            
+            ?>
 
 
 
@@ -81,8 +128,7 @@ if (isset($_SESSION['info'])) {
             echo " <li><a class='btn btn-default btn-lg' href='index.php?action=monprofile'>Mon Profil  </a></li>";
             echo " <li><a class='btn btn-danger btn-lg' href='index.php?action=deconnexion'>Deconnexion</a></li>";
         } else {
-            echo "<li><a class='btn btn-default btn-lg' href='index.php?action=login'>Login</a></li>";
-            echo "<li><a class='btn btn-default btn-lg' href='index.php?action=create'>S'inscrire</a></li>";
+          
             
         }
         ?>
@@ -120,10 +166,10 @@ if (isset($_SESSION['info'])) {
             ?>
 
 
-                    <footer>Le pied de page</footer>
 
         </div>
-        <script src="js/app.js"></script>
+<?php include('./vues/footer.php')?>
+
     </body>
 
     </html>

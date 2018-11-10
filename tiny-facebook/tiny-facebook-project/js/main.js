@@ -13,6 +13,7 @@
  }
 */
 
+
 function myFunction(x) {
     x.classList.toggle("change");
     $("#friendlistwrap").toggle("slow", function () {
