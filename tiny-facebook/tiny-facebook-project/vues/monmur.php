@@ -20,8 +20,8 @@
             $q0 = $pdo->prepare($sql);
             $q0->execute(array($_GET["id"],$_SESSION["id"]));
             $line = $q0->fetch();
-            var_dump($line);
-            exit();
+            //var_dump($line);
+            //exit();
         */
         // les deux ids à tester sont : $_GET["id"] et $_SESSION["id"]
         // A completer. Il faut récupérer une ligne, si il y en a pas ca veut dire que lon est pas ami avec cette personne
@@ -62,30 +62,6 @@ function humanTiming ($time)
     }
 
 }
-//Insert des like dislike
-if (isset($_POST['action'])) {
-  $post_id = $_POST['post_id'];
-  $action = $_POST['action'];
-  switch ($action) {
-  	case 'like':
-         $sql="INSERT INTO rating_info (user_id, post_id, rating_action) 
-         	   VALUES ($user_id, $post_id, 'like') 
-         	   ON DUPLICATE KEY UPDATE rating_action='like'";
-         break;
-  	case 'dislike':
-          $sql="INSERT INTO rating_info (user_id, post_id, rating_action) 
-               VALUES ($user_id, $post_id, 'dislike') 
-         	   ON DUPLICATE KEY UPDATE rating_action='dislike'";
-         break;
-  	case 'unlike':
-	      $sql="DELETE FROM rating_info WHERE user_id=$user_id AND post_id=$post_id";
-	      break;
-  	case 'undislike':
-      	  $sql="DELETE FROM rating_info WHERE user_id=$user_id AND post_id=$post_id";
-      break;
-  	default:
-  		break;
-  }}
 
 
    function getLikes($id)
