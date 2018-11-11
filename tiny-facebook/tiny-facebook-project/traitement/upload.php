@@ -44,10 +44,13 @@ if ($uploadOk == 0) {
         // Etape 3 : ici le login est unique, donc on sait que l'on peut avoir zero ou une  seule ligne.
         $line = $q->fetch();
         if($line['avatar'] != null){
-            
- //On supprime la potentiel ancienne image dans le repertoire upload
+            if($line['avatar'] == "user404.png"){
+                
+            }else{
+                //On supprime la potentiel ancienne image dans le repertoire upload
             $myFile = "uploads/".$line['avatar'];
-            unlink($myFile) or die("Couldn't delete file");
+            unlink($myFile) or die("Impossible de supprimer le fichier ".$myFile);
+            }
  //On supprime la potentiel ancienne image dans la DB
             $sql = "UPDATE user SET avatar =null WHERE id=?";
             $q = $pdo->prepare($sql);

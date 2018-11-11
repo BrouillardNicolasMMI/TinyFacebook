@@ -52,6 +52,8 @@ function humanTiming ($time)
         60 => 'minute',
         1 => 'secondes'
     );
+    
+   
 
     foreach ($tokens as $unit => $text) {
         if ($time < $unit) continue;
@@ -60,12 +62,114 @@ function humanTiming ($time)
     }
 
 }
+//Insert des like dislike
+if (isset($_POST['action'])) {
+  $post_id = $_POST['post_id'];
+  $action = $_POST['action'];
+  switch ($action) {
+  	case 'like':
+         $sql="INSERT INTO rating_info (user_id, post_id, rating_action) 
+         	   VALUES ($user_id, $post_id, 'like') 
+         	   ON DUPLICATE KEY UPDATE rating_action='like'";
+         break;
+  	case 'dislike':
+          $sql="INSERT INTO rating_info (user_id, post_id, rating_action) 
+               VALUES ($user_id, $post_id, 'dislike') 
+         	   ON DUPLICATE KEY UPDATE rating_action='dislike'";
+         break;
+  	case 'unlike':
+	      $sql="DELETE FROM rating_info WHERE user_id=$user_id AND post_id=$post_id";
+	      break;
+  	case 'undislike':
+      	  $sql="DELETE FROM rating_info WHERE user_id=$user_id AND post_id=$post_id";
+      break;
+  	default:
+  		break;
+  }}
+
+
+   function getLikes($id)
+{
+  global $pdo;
+  $sql = "SELECT COUNT(*) FROM rating_info 
+  		  WHERE post_id = ? AND rating_action='like'";
+  $rs = $pdo->prepare($sql);
+  $rs->execute(array($id));
+  $result=$rs->fetch();
+  echo $result[0];
+}
+
+// Get total number of dislikes for a particular post
+function getDislikes($id)
+{
+   global $pdo;
+  $sql = "SELECT COUNT(*) FROM rating_info 
+  		  WHERE post_id = ? AND rating_action='dislike'";
+  $rs = $pdo->prepare($sql);
+  $rs->execute(array($id));
+  $result=$rs->fetch();
+  echo $result[0];
+}
+
+// Get total number of likes and dislikes for a particular post
+function getRating($id)
+{
+   global $pdo;
+  $rating = array();
+  $likes_query = "SELECT COUNT(*) FROM rating_info WHERE post_id = ? AND rating_action='like'";
+  $dislikes_query = "SELECT COUNT(*) FROM rating_info 
+		  			WHERE post_id = ? AND rating_action='dislike'";
+  $likes_rs = $pdo->prepare($likes_query);
+  $dislikes_rs = $pdo->prepare($dislikes_query);
+  $likes_rs->execute(array($id));
+  $dislikes_rs->execute(array($id));
+  $likes=$likes_rs->fetch();
+  $dislikes=$dislikes_rs->fetch();
+  $rating = [
+  	'likes' => $likes[0],
+  	'dislikes' => $dislikes[0]
+  ];
+  return json_encode($rating);
+}
+
+// Check if user already likes post or not
+function userLiked($post_id)
+{
+  global $pdo;
+  $user_id = $_SESSION['id'];
+  $sql = "SELECT * FROM rating_info WHERE user_id=? 
+  		  AND post_id=? AND rating_action='like'";
+  $result = $pdo->prepare($sql);
+  $result->execute(array($user_id,$post_id));
+  if ($result->fetch() > 0) {
+  	return true;
+  }else{
+  	return false;
+  }
+}
+
+// Check if user already dislikes post or not
+function userDisliked($post_id)
+{
+  global $pdo;
+  $user_id=$_SESSION['id'];
+  $sql = "SELECT * FROM rating_info WHERE user_id=? 
+  		  AND post_id=? AND rating_action='dislike'";
+  $result = $pdo->prepare($sql);
+  $result->execute(array($user_id,$post_id));
+  
+  if ($result->fetch() > 0) {
+  	return true;
+  }else{
+  	return false;
+  }
+}
     
     
    
 $sql = "SELECT * FROM user WHERE id=?";
 // Etape 1  : preparation
-$q1 = $pdo->prepare($sql);
+$q1=$pdo->prepare($sql);
 // Etape 2 : execution : 2 paramètres dans la requêtes !!
 $q1->execute(array($_SESSION['id']));
 // Etape 3 : ici le login est unique, donc on sait que l'on peut avoir zero ou une  seule ligne.
@@ -186,11 +290,11 @@ $mesamis = $qamis->fetch();
         $auteurnom['avatar']="user404.png";
     }
                      if($posts['idAuteurPost']==$me['id']){ 
-                     $itsmypostdelete="<a href='#'><i class='glyphicon glyphicon-remove'></i></a>";
+                     $itsmypostdelete="<a href='#' id='submitdeletepost'><i class='glyphicon glyphicon-remove'></i></a>";
                      }else{
                           $itsmypostdelete="<p href='#' class='badge badge-primary'>Amis</p>";
                      }
-               // var_dump($auteurnom);
+                //var_dump($posts['id']);
 echo"
             <div class='panel panel-default'>
             
@@ -213,7 +317,10 @@ echo"
                                 </div>
                             </div>
                             <div class='col-md-1'>
+                            <form action='index.php?action=deletepost' id='deletepostform' method='POST'>
+                            <input type='hidden' name='idpostdelete' value=".$posts['id']." />
                                 ".$itsmypostdelete."
+                            </form>
                             </div>
                         </div>
                     </section>
@@ -224,14 +331,36 @@ echo"
                         <p>".$posts['contenu']."</p>";
     if($posts['image']!=null){
         echo "
-        <img src='uploads/".$posts['image']."'  width=200px/>
-        </section>
+        <img src='uploads/".$posts['image']."'  width=200px style='width: 100%;'/>";}
+    
+    echo "</section>
                     <section class='post-footer'>
                     <h5><br/></h5>
                         <hr>
                         <div class='post-footer-option container'>
-                            <ul class='list-unstyled'>
-                                <li><a href='#'><i class='glyphicon glyphicon-thumbs-up'></i> Like</a></li>
+                            <ul class='list-unstyled'>";
+   
+    if (userLiked($posts['id'])){
+      		 echo "<i class='glyphicon glyphicon-thumbs-up like-btn' data-id='".$posts['id']."' ></i>";
+    }else{
+      		  echo "<i class='glyphicon glyphicon-thumbs-up liked like-btn' data-id='".$posts['id']."'></i>";
+    }
+    
+    echo "<span class='likes'>".getLikes($posts['id'])."</span>";
+      	
+	   // <!-- if user dislikes post, style button differently -->
+      
+    if (userDisliked($posts['id'])){
+         echo "<i class='glyphicon glyphicon-thumbs-down dislike-btn' data-id='".$posts['id']."' ></i>";
+    }else{ 
+      	 echo "<i class='glyphicon glyphicon-thumbs-down disliked dislike-btn' data-id='".$posts['id']."' ></i>";
+    }
+    echo "<span class='dislikes'>".getDislikes($posts['id'])."</span>";
+      	
+      	
+ //  <li><a href='#' id='likepost'><i class='glyphicon glyphicon-thumbs-up like-btn'></i> Like</a></li>
+ 
+                            echo "    
                                 <li><a href='javascript:void(0)' id='affichercomment".$posts['id']."' onClick='myFunction(".$posts['id'].")' ><i class='glyphicon glyphicon-comment'></i> Commentaire (".$nbrcom[0].")</a></li>
 
                             </ul>
@@ -240,7 +369,9 @@ echo"
                     </section>
                 </div>
             </div>"; 
-    }else{
+    
+                     /*
+                 }else{
         echo"
                         
                     </section>
@@ -257,7 +388,7 @@ echo"
                        
                     </section>
                 </div>
-            </div>";}
+            </div>";}*/
 
 
 

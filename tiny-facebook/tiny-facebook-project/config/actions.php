@@ -16,5 +16,6 @@ $listeDesActions = array(
     "acceptfriendaction" => "traitement/acceptfriendaction.php",
     "refusefriendaction" => "traitement/refusefriendaction.php",
     "postapost" => "traitement/postapost.php",
+    "deletepost" => "traitement/deletepost.php",
     "postacomment" => "traitement/postacomment.php",
 );

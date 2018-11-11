@@ -586,3 +586,8 @@ header h1 {
     top: 20px;
     position: absolute;
 }
+.liked{
+    color:blue;
+    font-size:1.3em;
+}
+.disliked{color:red}

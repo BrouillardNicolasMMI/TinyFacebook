@@ -26,10 +26,7 @@ ob_start(); // Je démarre le buffer de sortie : les données à afficher sont s
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
       
 -->
-        <script src="js/jquery-3.2.1.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/app.js"></script>
+       
 
         <?php if(!isset($_SESSION['id'])){
     echo"<link href='./css/connect.css' rel='stylesheet'>";
@@ -184,8 +181,11 @@ if (isset($_SESSION['info'])) {
 
         </div>
         <?php include('./vues/footer.php')?>
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
 
-
+        <script src="js/app.js"></script>
+        <script src="js/main.js"></script>
     </body>
 
     </html>

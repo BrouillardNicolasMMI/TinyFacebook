@@ -13,9 +13,11 @@
  }
 */
 
-
-
-
+$(document).ready(function () {
+document.getElementById("submitdeletepost").onclick = function() {
+    document.getElementById("deletepostform").submit();
+}
+});
 //Footer stike
 $(document).ready(function () {
 
